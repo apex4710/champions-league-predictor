@@ -1,6 +1,6 @@
 # UEFA Champions League Predictor
 
-**<a href="https://apex4710.github.io/" target="_blank">Access the site here</a>**
+**<a href="https://apex4710.github.io/champions-league-predictor/" target="_blank">Access the site here</a>**
 
 Welcome to the UEFA Champions League Predictor! This web application allows you to enter match scores and view the updated points table based on the League Phase Tiebreakers.
 
