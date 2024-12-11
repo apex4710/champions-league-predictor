@@ -526,6 +526,7 @@ document.addEventListener("DOMContentLoaded", function() {
     updatePointsTable();
 
     const { jsPDF } = window.jspdf;
+    
     function exportToPDF() {
         const doc = new jsPDF();
     
@@ -547,7 +548,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 doc.addPage();
                 y = 20; // Reset starting point on new page for each matchday
             }
-            
+    
             doc.setFontSize(16);
             doc.setTextColor(0, 51, 102);
             doc.text(`Matchday ${matchday}`, 10, y);
@@ -604,56 +605,69 @@ document.addEventListener("DOMContentLoaded", function() {
             y += 10;
         });
     
-        // Points Table Header
-        doc.setFontSize(18);
-        doc.setTextColor(0, 51, 102); // UEFA Blue
-        doc.text("Points Table", 105, y, null, null, "center");
-        y += 10;
+        // Points Table Section
+        const rowsPerPage = [8, 16, 12]; // Top 8, 9-24, 25-36
+        const startIndices = [0, 8, 24]; // Start indices for each page
     
-        // Points Table Body
-        const tableBody = Array.from(document.querySelectorAll("#pointsTable tbody tr")).map((row, rowIndex) => {
-            const rowData = Array.from(row.cells).map(cell => cell.innerText);
-            const rank = rowData[0];
-            const indicatorColor = rowIndex < 8 ? [0, 255, 0] : rowIndex < 24 ? [255, 215, 0] : [255, 0, 0];
+        rowsPerPage.forEach((rowCount, pageIndex) => {
+            doc.addPage();
+            y = 20;
     
-            // Add a colored indicator next to the rank
-            return [
-                {
-                    content: "",
-                    styles: {
-                        cellWidth: 5,
-                        halign: "center",
-                        valign: "middle",
-                        fillColor: indicatorColor,
-                    },
+            doc.setFontSize(18);
+            doc.setTextColor(0, 51, 102); // UEFA Blue
+            doc.text("Points Table", 105, y, null, null, "center");
+            y += 10;
+    
+            const tableBody = Array.from(document.querySelectorAll("#pointsTable tbody tr"))
+                .slice(startIndices[pageIndex], startIndices[pageIndex] + rowCount)
+                .map((row, rowIndex) => {
+                    const rowData = Array.from(row.cells).map(cell => cell.innerText);
+                    const rank = rowData[0];
+                    const indicatorColor = pageIndex === 0
+                        ? [0, 255, 0] // Green for Top 8
+                        : pageIndex === 1
+                            ? [255, 215, 0] // Gold for 9-24
+                            : [255, 0, 0]; // Red for 25-36
+    
+                    // Add a colored indicator next to the rank
+                    return [
+                        {
+                            content: "",
+                            styles: {
+                                cellWidth: 5,
+                                halign: "center",
+                                valign: "middle",
+                                fillColor: indicatorColor,
+                            },
+                        },
+                        rank, // Replace "Position" with "No."
+                        ...rowData.slice(1),
+                    ];
+                });
+    
+            // Render Points Table
+            doc.autoTable({
+                startY: y,
+                head: [
+                    ["", "No.", "Team", "Played", "Won", "Drawn", "Lost", "Goals For", "Goals Against", "Goal Difference", "Points"],
+                ],
+                body: tableBody,
+                bodyStyles: {
+                    halign: "center",
                 },
-                rank, // Replace "Position" with "No."
-                ...rowData.slice(1),
-            ];
-        });
-    
-        // Render Points Table
-        doc.autoTable({
-            startY: y,
-            head: [
-                ["", "No.", "Team", "Played", "Won", "Drawn", "Lost", "Goals For", "Goals Against", "Goal Difference", "Points"],
-            ],
-            body: tableBody,
-            bodyStyles: {
-                halign: "center",
-            },
-            styles: {
-                lineWidth: 0.1,
-                lineColor: [200, 200, 200],
-            },
-            headStyles: {
-                fillColor: [45, 45, 45],
-                textColor: [255, 255, 255],
-            },
-            columnStyles: {
-                0: { cellWidth: 5 }, // Indicator column
-                1: { cellWidth: 10 }, // No. column (was Position)
-            },
+                styles: {
+                    lineWidth: 0.1,
+                    lineColor: [200, 200, 200],
+                },
+                headStyles: {
+                    fillColor: [45, 45, 45],
+                    textColor: [255, 255, 255],
+                },
+                columnStyles: {
+                    0: { cellWidth: 5 }, // Indicator column
+                    1: { cellWidth: 10 }, // No. column
+                },
+            });
         });
     
         // Footer
