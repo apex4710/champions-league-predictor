@@ -174,8 +174,8 @@ document.addEventListener("DOMContentLoaded", function() {
         { matchday: 6, date: "2024-12-11", team1: "Juventus FC (ITA)", team2: "Manchester City FC (ENG)", score1: 2, score2: 0 },
         { matchday: 6, date: "2024-12-11", team1: "Feyenoord Rotterdam (NED)", team2: "AC Sparta Praha (CZE)", score1: 4, score2: 2 },
         // Matchday 7
-        { matchday: 7, date: "2024-01-21", team1: "AS Monaco FC (MCO)", team2: "Aston Villa FC (ENG)", score1: null, score2: null },
-        { matchday: 7, date: "2024-01-21", team1: "Atalanta BC (ITA)", team2: "SK Sturm Graz (AUT)", score1: null, score2: null },
+        { matchday: 7, date: "2024-01-21", team1: "AS Monaco FC (MCO)", team2: "Aston Villa FC (ENG)", score1: 1, score2: 0 },
+        { matchday: 7, date: "2024-01-21", team1: "Atalanta BC (ITA)", team2: "SK Sturm Graz (AUT)", score1: 4, score2: 0 },
         { matchday: 7, date: "2024-01-21", team1: "Bologna FC 1909 (ITA)", team2: "Borussia Dortmund (GER)", score1: null, score2: null },
         { matchday: 7, date: "2024-01-21", team1: "ŠK Slovan Bratislava (SVK)", team2: "VfB Stuttgart (GER)", score1: null, score2: null },
         { matchday: 7, date: "2024-01-21", team1: "Liverpool FC (ENG)", team2: "Lille OSC (FRA)", score1: null, score2: null },
